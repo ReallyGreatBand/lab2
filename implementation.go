@@ -34,7 +34,6 @@ func (list *linkedList) AddNode(value string) {
 //"- * / 15 - 7 + 1 1 3 + 2 + 1 1"
 
 func CalculatePrefix(input string) (string, error) {
-
 	arr, err := checkInput(input)
 	if err != nil {
 		return "", err

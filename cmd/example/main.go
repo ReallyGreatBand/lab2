@@ -2,9 +2,10 @@ package main
 
 import (
 	"flag"
-	"fmt"
-
-	lab2 "lab2"
+	"io"
+	"lab2"
+	"os"
+	"strings"
 )
 
 var (
@@ -13,17 +14,55 @@ var (
 )
 
 func main() {
+
+	fStringPtr := flag.String("f", "", "enter the filename with expression")
+	oStringPtr := flag.String("o", "", "enter the name of output file")
 	flag.Parse()
 
-	// TODO: Change this to accept input from the command line arguments as described in the task and
-	//       output the results using the ComputeHandler instance.
-	//       handler := &lab2.ComputeHandler{
-	//           Input: {construct io.Reader according the command line parameters},
-	//           Output: {construct io.Writer according the command line parameters},
-	//       }
-	//       err := handler.Compute()
+	fString := *fStringPtr
+	oString := *oStringPtr
+	eString := flag.Lookup("e").Value.String()
 
-	res, err := lab2.CalculatePrefix("- * / 15 - 7 + 1 1 3 + 2 + 1 1")
-	fmt.Println(res)
-	fmt.Println(err)
+	// fmt.Println(eString)
+	// fmt.Println(fString)
+
+	if (eString != "" && fString != "") || (eString == "" && fString == "") {
+		os.Stderr.WriteString("Wrong arguments")
+		return
+	}
+
+	// var handler lab2.ComputeHandler
+	var reader io.Reader
+	var writer io.Writer
+	var fileDesc *os.File
+	if eString != "" {
+		reader = strings.NewReader(eString)
+	} else {
+		file, err := os.Open(fString)
+		if err != nil {
+			os.Stderr.WriteString("File does not exist")
+			return
+		}
+		reader = file
+	}
+	if oString == "" {
+		writer = os.Stdout
+	} else {
+		file, err := os.OpenFile(oString, os.O_RDWR|os.O_CREATE, 0755)
+		if err != nil {
+			os.Stderr.WriteString("Cannot create file")
+			return
+		}
+		writer = file
+		fileDesc = file
+	}
+
+	handler := &lab2.ComputeHandler{reader, writer}
+	err := handler.Compute()
+	if err != nil {
+		os.Stderr.WriteString(err.Error())
+	}
+	if fileDesc != nil {
+		defer fileDesc.Close()
+	}
 }
