@@ -57,7 +57,7 @@ func main() {
 		fileDesc = file
 	}
 
-	handler := &lab2.ComputeHandler{reader, writer}
+	handler := &lab2.ComputeHandler{Reader: reader, Writer: writer}
 	err := handler.Compute()
 	if err != nil {
 		os.Stderr.WriteString(err.Error())
