@@ -29,11 +29,11 @@ jobs:
     #         dep ensure
     #     fi
 
-    - name: Test
-      run: make test
-
     - name: Build
       run: make out/example
 
+    - name: Test
+      run: make test
+
     - name: Clean
-      run: clean
+      run: make clean
