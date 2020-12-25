@@ -2,7 +2,6 @@ package lab2
 
 import (
 	"bytes"
-	// lab2 "lab2"
 	"strings"
 	"testing"
 
@@ -16,9 +15,9 @@ type MySuiteHandler struct{}
 var _ = gocheck.Suite(&MySuiteHandler{})
 
 func (s *MySuiteHandler) TestOutputResult(c *gocheck.C) {
-	mockReader := *strings.NewReader("- * / 15 - 7 + 1 1 3 + 2 + 1 1")
-	var mockWriter bytes.Buffer
-	handler := ComputeHandler{&mockReader, &mockWriter}
+	mockReader := strings.NewReader("- * / 15 - 7 + 1 1 3 + 2 + 1 1")
+	mockWriter := new(bytes.Buffer)
+	handler := ComputeHandler{mockReader, mockWriter}
 	err := handler.Compute()
 	res, _ := mockWriter.ReadString(0)
 	c.Assert(res, gocheck.Equals, "5")
@@ -26,9 +25,9 @@ func (s *MySuiteHandler) TestOutputResult(c *gocheck.C) {
 }
 
 func (s *MySuiteHandler) TestInputError(c *gocheck.C) {
-	mockReader := *strings.NewReader("- * * / 15 - 7 + 1 1 3 + 2 + 1 1")
-	var mockWriter bytes.Buffer
-	handler := ComputeHandler{&mockReader, &mockWriter}
+	mockReader := strings.NewReader("- * * / 15 - 7 + 1 1 3 + 2 + 1 1")
+	mockWriter := new(bytes.Buffer)
+	handler := ComputeHandler{mockReader, mockWriter}
 	err := handler.Compute()
 	res, _ := mockWriter.ReadString(0)
 	c.Assert(res, gocheck.Equals, "")

@@ -9,29 +9,24 @@ import (
 )
 
 var (
-	inputExpression = flag.String("e", "", "Expression to compute")
 	// TODO: Add other flags support for input and output configuration.
+	eStringPtr = flag.String("e", "", "enter the expression to compute")
+	fStringPtr = flag.String("f", "", "enter the filename with expression")
+	oStringPtr = flag.String("o", "", "enter the name of output file")
 )
 
 func main() {
-
-	fStringPtr := flag.String("f", "", "enter the filename with expression")
-	oStringPtr := flag.String("o", "", "enter the name of output file")
 	flag.Parse()
 
 	fString := *fStringPtr
 	oString := *oStringPtr
-	eString := flag.Lookup("e").Value.String()
-
-	// fmt.Println(eString)
-	// fmt.Println(fString)
+	eString := *eStringPtr
 
 	if (eString != "" && fString != "") || (eString == "" && fString == "") {
 		os.Stderr.WriteString("Wrong arguments")
 		return
 	}
 
-	// var handler lab2.ComputeHandler
 	var reader io.Reader
 	var writer io.Writer
 	var fileDesc *os.File

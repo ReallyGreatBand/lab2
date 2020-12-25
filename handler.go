@@ -3,7 +3,7 @@ package lab2
 import (
 	"fmt"
 	"io"
-	"strings"
+	"io/ioutil"
 )
 
 // ComputeHandler should be constructed with input io.Reader and output io.Writer.
@@ -16,12 +16,11 @@ type ComputeHandler struct {
 
 func (ch *ComputeHandler) Compute() error {
 	// TODO: Implement.
-	buf := make([]byte, 1000)
-	_, err := ch.Reader.Read(buf)
+	buf, err := ioutil.ReadAll(ch.Reader)
 	if err != nil {
 		return fmt.Errorf("Unexpected error")
 	}
-	res, err := CalculatePrefix(strings.Trim(string(buf), "\000"))
+	res, err := CalculatePrefix(string(buf))
 	if err != nil {
 		return err
 	}
